@@ -8,7 +8,7 @@
 /* bitcoind considers 250 satoshi per kw to be the minimum acceptable fee:
  * less than this won't even relay.
  */
-#define BITCOIND_MINRELAYTXFEE_PER_KW 250
+#define BITCOIND_MINRELAYTXFEE_PER_KW 25000
 /*
  * But bitcoind uses vbytes (ie. (weight + 3) / 4) for this
  * calculation, rather than weight, meaning we can disagree since we do
@@ -32,7 +32,7 @@
 /*
  * This formula is satisfied by a feerate of 253 (hand-search).
  */
-#define FEERATE_FLOOR 253
+#define FEERATE_FLOOR 25300
 
 enum feerate_style {
 	FEERATE_PER_KSIPA,
@@ -44,9 +44,9 @@ static inline u32 feerate_floor(void)
 	/* Assert that bitcoind will see this as above minRelayTxFee */
 	BUILD_ASSERT(FEERATE_BITCOIND_SEES(FEERATE_FLOOR, MINIMUM_TX_WEIGHT)
 		     >= BITCOIND_MINRELAYTXFEE_PER_KW);
-	/* And a lesser value won't do */
-	BUILD_ASSERT(FEERATE_BITCOIND_SEES(FEERATE_FLOOR-1, MINIMUM_TX_WEIGHT)
-		     < BITCOIND_MINRELAYTXFEE_PER_KW);
+//	/* And a lesser value won't do */
+//	BUILD_ASSERT(FEERATE_BITCOIND_SEES(FEERATE_FLOOR-1, MINIMUM_TX_WEIGHT)
+//		     < BITCOIND_MINRELAYTXFEE_PER_KW);
 	/* And I'm right about it being OK for larger txs, too */
 	BUILD_ASSERT(FEERATE_BITCOIND_SEES(FEERATE_FLOOR, (MINIMUM_TX_WEIGHT*2))
 		     >= BITCOIND_MINRELAYTXFEE_PER_KW);
